@@ -221,7 +221,7 @@ jobs:
 
     - name: Package and deploy
       run: |
-        mvn -B deploy -DskipTests=true -Dgpg.skip
+        mvn -B package -DskipTests=true -Dgpg.skip
 #      env:
 #        OSSRH_USER: ${{ secrets.OSSRH_USER }}
 #        OSSRH_PASS: ${{ secrets.OSSRH_PASS }}
