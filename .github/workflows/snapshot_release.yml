@@ -312,10 +312,19 @@ jobs:
 
     - name: Download release artifact for Windows Installer (with Java)
       id: download-release-artifact-win-with-java
+      if: github.event_name == 'release'
       uses: actions/download-artifact@v3
       with:
         name: openrefine-win-with-java-${{ steps.get_release_upload_url.outputs.tag_name }}
         path: ./packaging/target/openrefine-win-with-java-${{ steps.get_release_upload_url.outputs.tag_name }}
+        
+    - name: Download build artifact for Windows Installer (with Java)
+      id: download-build-artifact-win-with-java
+      if: github.event_name != 'release'
+      uses: actions/download-artifact@v3
+      with:
+        name: openrefine-win-with-java-3.8-SNAPSHOT
+        path: ./packaging/target/openrefine-win-with-java-3.8-SNAPSHOT
 
 #    - name: Sign the executables
 #      uses: nextgens/authenticode-sign-action@v1.0.1
