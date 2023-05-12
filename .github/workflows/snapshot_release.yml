@@ -310,6 +310,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Get release upload URL
+      id: get_release_upload_url
+      if: github.event_name == 'release'
+      uses: bruceadams/get-release@v1.3.2
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
     - name: Download release artifact for Windows Installer (with Java)
       id: download-release-artifact-win-with-java
       if: github.event_name == 'release'
@@ -377,10 +384,12 @@ jobs:
 #      shell: cmd
 
     - name: Upload the installer as an artifact
+      id: upload-build-artifact-win-with-java-installer
+      if: github.event_name != 'release'
       uses: actions/upload-artifact@v2
       with:
-        path: "./packaging/target/openrefine-win-with-java-installer-${{ steps.get_release_upload_url.outputs.tag_name }}.exe"
-        name: wininstaller-innosetup-${{ steps.get_release_upload_url.outputs.tag_name }}
+        path: "./packaging/target/openrefine-win-with-java-installer-4.0-SNAPSHOT.exe"
+        name: wininstaller-innosetup-4.0-SNAPSHOT
 
     - name: Upload release asset for Windows (with Java)
       id: upload-release-asset-win-with-java-installer
