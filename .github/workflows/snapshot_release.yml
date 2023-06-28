@@ -395,7 +395,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         path: "./packaging/target/openrefine-win-with-java-installer-${{ needs.mac_test_and_deploy.outputs.version_number_string }}.exe"
-        name: wininstaller-innosetup-${{ needs.mac_test_and_deploy.outputs.version_number_string }}
+        name: win-with-java-installer-${{ needs.mac_test_and_deploy.outputs.version_number_string }}
 
     - name: Upload release asset for Windows (with Java)
       id: upload-release-asset-win-with-java-installer
