@@ -262,8 +262,8 @@ jobs:
       id: upload-build-artifact-win
       uses: actions/upload-artifact@v3
       with:
-        path: "./packaging/target/openrefine-win-${{ needs.mac_test_and_deploy.outputs.version_number_string }}.zip"
-        name: win-archive-${{ needs.mac_test_and_deploy.outputs.version_number_string }}
+        path: "./packaging/target/openrefine-win-${{ steps.version_string_variable.outputs.output_value }}.zip"
+        name: win-archive-${{ steps.version_string_variable.outputs.output_value }}
 
     - name: Upload release asset for Windows (with Java)
       id: upload-release-asset-win-with-java
