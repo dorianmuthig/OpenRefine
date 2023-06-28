@@ -280,7 +280,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         path: "./packaging/target/openrefine-win-with-java-${{ steps.version_string_variable.outputs.output_value }}.zip"
-        name: win-with-java-archive-${{ needs.mac_test_and_deploy.outputs.version_number_string }}
+        name: win-with-java-archive-${{ steps.version_string_variable.outputs.output_value }}
 
     - name: Unzip build artifact for Windows (with Java) for Installer
       id: unzip-build-artifact-win-with-java
@@ -290,7 +290,7 @@ jobs:
       id: upload-build-artifact-win-with-java-for-installer
       uses: actions/upload-artifact@v3
       with:
-        name: openrefine-win-with-java-${{ steps.version_string_variable.outputs.output_value }}
+        name: installertemp-win-with-java-${{ steps.version_string_variable.outputs.output_value }}
         path: ./packaging/target/openrefine-win-with-java-${{ steps.version_string_variable.outputs.output_value }}/openrefine-${{ steps.version_string_variable.outputs.output_value }}
 
     - name: Upload Release Asset Linux
@@ -308,7 +308,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         path: "./packaging/target/openrefine-linux-${{ steps.version_string_variable.outputs.output_value }}.tar.gz"
-        name: linux-${{ needs.mac_test_and_deploy.outputs.version_number_string }}
+        name: linux-${{ steps.version_string_variable.outputs.output_value }}
 
     - name: Upload Release Asset Mac
       id: upload-release-asset-mac
@@ -325,7 +325,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         path: "./packaging/target/openrefine-mac-${{ steps.version_string_variable.outputs.output_value }}.dmg"
-        name: mac-${{ needs.mac_test_and_deploy.outputs.version_number_string }}
+        name: mac-${{ steps.version_string_variable.outputs.output_value }}
 
   windows_installer:
     runs-on: windows-2022
@@ -341,20 +341,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
-    - name: Download release artifact for Windows Installer (with Java)
-      id: download-release-artifact-win-with-java
-      if: github.event_name == 'release'
-      uses: actions/download-artifact@v3
-      with:
-        name: openrefine-win-with-java-${{ needs.mac_test_and_deploy.outputs.version_number_string }}
-        path: ./packaging/target/openrefine-win-with-java-${{ needs.mac_test_and_deploy.outputs.version_number_string }}
-        
     - name: Download build artifact for Windows Installer (with Java)
       id: download-build-artifact-win-with-java
-      if: github.event_name != 'release'
       uses: actions/download-artifact@v3
       with:
-        name: openrefine-win-with-java-3.8-SNAPSHOT
+        name: installertemp-win-with-java-3.8-SNAPSHOT
         path: ./packaging/target/openrefine-win-with-java-${{ needs.mac_test_and_deploy.outputs.version_number_string }}
 
 #    - name: Sign the executables
@@ -371,33 +362,15 @@ jobs:
 
     - name: Build self-containing installer with InnoSetup 6 for Windows
       id: build-installer-innosetup-win-with-java
-      if: github.event_name == 'release'
       run: |
         "%ProgramFiles(x86)%\Inno Setup 6\iscc.exe" -DMyAppVersion="${{ needs.mac_test_and_deploy.outputs.version_number_string }}" -DMyProgramFiles="target\openrefine-win-with-java-${{ needs.mac_test_and_deploy.outputs.version_number_string }}" "packaging\openrefine.iss"
       shell: cmd
-
-    - name: Build self-containing installer with InnoSetup 6 for Windows
-      id: build-installer-innosetup-win-with-java-snapshot
-      if: github.event_name != 'release'
-      run: |
-        "%ProgramFiles(x86)%\Inno Setup 6\iscc.exe" -DMyAppVersion="${{ needs.mac_test_and_deploy.outputs.version_number_string }}" -DMyProgramFiles="target\openrefine-win-with-java-${{ needs.mac_test_and_deploy.outputs.version_number_string }}" "packaging\openrefine.iss"
-      shell: cmd
-
-    - name: Cleanup unused installer build artifact (delete)
-      id: delete-release-artifact-win-with-java
-      if: github.event_name == 'release'
-      uses: geekyeggo/delete-artifact@v2
-      with:
-        name: openrefine-win-with-java-${{ needs.mac_test_and_deploy.outputs.version_number_string }}
-        useGlob: false
-        failOnError: false
 
     - name: Cleanup unused installer build artifact (delete)
       id: delete-build-artifact-win-with-java
-      if: github.event_name != 'release'
       uses: geekyeggo/delete-artifact@v2
       with:
-        name: openrefine-win-with-java-${{ needs.mac_test_and_deploy.outputs.version_number_string }}
+        name: installertemp-win-with-java-${{ needs.mac_test_and_deploy.outputs.version_number_string }}
         useGlob: false
         failOnError: false
 
@@ -419,7 +392,6 @@ jobs:
 
     - name: Upload the installer as an artifact
       id: upload-build-artifact-win-with-java-installer
-      if: github.event_name != 'release'
       uses: actions/upload-artifact@v3
       with:
         path: "./packaging/target/openrefine-win-with-java-installer-${{ needs.mac_test_and_deploy.outputs.version_number_string }}.exe"
