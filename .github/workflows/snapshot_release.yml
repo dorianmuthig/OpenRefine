@@ -263,7 +263,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         path: "./packaging/target/openrefine-win-${{ steps.version_string_variable.outputs.output_value }}.zip"
-        name: win-archive-${{ steps.version_string_variable.outputs.output_value }}
+        name: openrefine-win-archive-${{ steps.version_string_variable.outputs.output_value }}
 
     - name: Upload release asset for Windows (with Java)
       id: upload-release-asset-win-with-java
@@ -280,7 +280,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         path: "./packaging/target/openrefine-win-with-java-${{ steps.version_string_variable.outputs.output_value }}.zip"
-        name: win-with-java-archive-${{ steps.version_string_variable.outputs.output_value }}
+        name: openrefine-win-with-java-archive-${{ steps.version_string_variable.outputs.output_value }}
 
     - name: Unzip build artifact for Windows (with Java) for Installer
       id: unzip-build-artifact-win-with-java
@@ -308,7 +308,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         path: "./packaging/target/openrefine-linux-${{ steps.version_string_variable.outputs.output_value }}.tar.gz"
-        name: linux-${{ steps.version_string_variable.outputs.output_value }}
+        name: openrefine-linux-${{ steps.version_string_variable.outputs.output_value }}
 
     - name: Upload Release Asset Mac
       id: upload-release-asset-mac
@@ -325,7 +325,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         path: "./packaging/target/openrefine-mac-${{ steps.version_string_variable.outputs.output_value }}.dmg"
-        name: mac-${{ steps.version_string_variable.outputs.output_value }}
+        name: openrefine-mac-${{ steps.version_string_variable.outputs.output_value }}
 
   windows_installer:
     runs-on: windows-2022
@@ -395,7 +395,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         path: "./packaging/target/openrefine-win-with-java-installer-${{ needs.mac_test_and_deploy.outputs.version_number_string }}.exe"
-        name: win-with-java-installer-${{ needs.mac_test_and_deploy.outputs.version_number_string }}
+        name: openrefine-win-with-java-installer-${{ needs.mac_test_and_deploy.outputs.version_number_string }}
 
     - name: Upload release asset for Windows (with Java)
       id: upload-release-asset-win-with-java-installer
